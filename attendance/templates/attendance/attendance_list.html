@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #bbbbbb;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 40px;
+            font-size: 2.8em;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 100px;
+            padding: 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        .table th {
+            background-color: #f4f4f9;
+            color: #2c3e50;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .table td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .badge {
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .badge-success {
+            background-color: #2ecc71;
+        }
+
+        .badge-danger {
+            background-color: #e74c3c;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'lesson_list' %}" class="back-btn">
+        <i class="fa fa-arrow-left"></i> Вернуться
+    </a>
+
+    <div class="container">
+        <h1>Список отметок</h1>
+        <div class="card">
+            <div class="card-header">
+                Детали посещений
+            </div>
+            <div class="card-body">
+                {% if attendances.count %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ученик</th>
+                                <th>Занятие</th>
+                                <th>Дата и время занятия</th>
+                                <th>Время отметки</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for attendance in attendances %}
+                            <tr>
+                                <td>{{ attendance.user.username }}</td>
+                                <td>{{ attendance.lesson.name }}</td>
+                                <td>{{ attendance.lesson.schedule_time|date:"d.m.Y H:i" }}</td>
+                                <td>
+                                    {% if attendance.checked_in_time %}
+                                        {{ attendance.checked_in_time|date:"d.m.Y H:i:s" }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {% if attendance.checked_in %}badge-success{% else %}badge-danger{% endif %}">
+                                        {{ attendance.checked_in|yesno:"Отметился,Не отметился" }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="no-data">Данные отсутствуют.</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

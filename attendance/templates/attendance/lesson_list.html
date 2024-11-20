@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lessons</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #bbbbbb;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 40px;
+            font-size: 2.8em;
+            font-weight: bold;
+        }
+        .lesson-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+        }
+        .lesson-item {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin: 15px;
+            padding: 20px;
+            width: 320px;
+            max-width: 100%;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        .lesson-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .lesson-item h3 {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .lesson-item p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .lesson-item a {
+            display: inline-block;
+            padding: 14px 28px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .lesson-item a:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        .lesson-item a:active {
+            transform: scale(1);
+        }
+
+        .attendance-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #e67e22;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .attendance-btn:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <h1>Список занятий</h1>
+
+    <a href="{% url 'attendance_list' %}" class="attendance-btn">Лист посещения</a>
+
+    <div class="lesson-list">
+        {% for lesson in lessons %}
+            <div class="lesson-item">
+                <h3>{{ lesson.name }}</h3>
+                <p>{{ lesson.description }}</p>
+                <p>{{ lesson.schedule_time|date:"d M Y H:i" }}</p>
+                <a href="{% url 'qr_code_page' lesson.id %}">Перейти к QR-коду</a>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{% extends 'attendance/base_generic.html' %}
+
+{% block content %}
+  <h1>Профиль пользователя</h1>
+
+  <div>
+    <strong>Имя:</strong> {{ user.username }}
+  </div>
+  <div>
+    <strong>Email:</strong> {{ user.email }}
+  </div>
+
+  <a href="{% url 'logout' %}">Выйти</a>
+{% endblock %}
