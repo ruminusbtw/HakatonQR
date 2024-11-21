@@ -8,10 +8,11 @@ def generate_qr_code(data):
     if not data:
         raise ValueError("Данные для QR-кода не могут быть пустыми")
 
-    encoded_data = base64.b64encode(data.encode()).decode()
+    short_hash = hash_qr_data(data)
+    print("Короткий хэш данных:", short_hash)
 
-    decoded_data = base64.b64decode(encoded_data).decode()
-    print("Декодированные данные:", decoded_data)
+    encoded_data = base64.b64encode(data.encode()).decode()
+    print("Закодированные данные:", encoded_data)
 
     qr = qrcode.QRCode(
         version=1,
@@ -19,7 +20,7 @@ def generate_qr_code(data):
         box_size=10,
         border=4,
     )
-    qr.add_data(encoded_data)
+    qr.add_data(f"{encoded_data} | hash: {short_hash}")
     qr.make(fit=True)
 
     img = qr.make_image(fill_color="black", back_color="white")
@@ -29,4 +30,12 @@ def generate_qr_code(data):
     return buffer
 
 def hash_qr_data(data):
-    return hashlib.sha256(data.encode()).hexdigest()
+    full_hash = hashlib.sha256(data.encode()).hexdigest()
+    return full_hash[:8]
+
+if __name__ == "__main__":
+    data = "Пример данных"
+    qr_image = generate_qr_code(data)
+    with open("qr_code.png", "wb") as f:
+        f.write(qr_image.getvalue())
+    print("QR-код сохранён в файл 'qr_code.png'.")

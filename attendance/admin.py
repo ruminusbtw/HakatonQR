@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Lesson, Attendance
+from .models import Lesson, Attendance  # Импорт существующих моделей из models.py
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
